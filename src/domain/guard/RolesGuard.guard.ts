@@ -1,33 +1,41 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+    Injectable,
+    CanActivate,
+    ExecutionContext,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UsersService } from '../../application/module/users/users.service';
-import { GqlExecutionContext } from "@nestjs/graphql";
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private usersService: UsersService,
-  ) {}
+    constructor(
+        private reflector: Reflector,
+    ) {}
 
-  async canActivate(context: ExecutionContext) : Promise<boolean> {
-    const ctx = GqlExecutionContext.create(context);
-    const request = ctx.getContext().req;
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    async canActivate(context: ExecutionContext): Promise<boolean> {
+        const ctx = GqlExecutionContext.create(context);
+        const request = ctx.getContext().req;
+        const roles = this.reflector.get<string[]>('roles', context.getHandler());
 
-    if (!roles) {
-      return true;
+        if (!roles) {
+            return true;
+        }
+
+        const user = request.user;
+        const userRoles = request.roles;
+
+        if (!userRoles) {
+            return false;
+        }
+
+        const hasRole = () => roles.every((role) => userRoles.includes(role));
+        if (user && hasRole()) {
+            console.log('User has the required roles');
+            return true;
+        } else {
+            console.log('User does not have the required roles');
+            throw new UnauthorizedException('Access denied');
+        }
     }
-
-    const user = request.user;
-    const userRoles = request.roles
-    console.log('userRoles', userRoles);
-    console.log('roles', roles);
-    if (!userRoles) {
-      return false;
-    }
-
-    const hasRole = () => roles.every((role) => userRoles.includes(role));
-    return user && hasRole();
-  }
 }
