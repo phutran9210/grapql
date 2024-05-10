@@ -1,0 +1,4 @@
+type Query {
+    findAll: [User!]!
+    findOne(id: ID!): User
+}
