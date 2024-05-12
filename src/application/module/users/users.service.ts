@@ -20,7 +20,6 @@ export class UsersService {
     ) {}
 
     async create(createUserInput: CreateUserInput) {
-        console.log('createUserInput', createUserInput);
         try {
             const existingUser = await this.usersRepository.findOne({
                 where: { username: createUserInput.username },
@@ -30,11 +29,13 @@ export class UsersService {
                     status: 400,
                 });
             }
+
             const defaultRole = await this.roleRepository.findOne({ where: { id: this.defaultRoleId } });
             const newUser = this.usersRepository.create({
                 ...createUserInput,
                 roles: [defaultRole],
             });
+
             return await this.usersRepository.save(newUser);
         } catch (error) {
             console.log(error);

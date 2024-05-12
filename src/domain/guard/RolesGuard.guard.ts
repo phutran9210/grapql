@@ -1,17 +1,10 @@
-import {
-    Injectable,
-    CanActivate,
-    ExecutionContext,
-    UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-    constructor(
-        private reflector: Reflector,
-    ) {}
+    constructor(private reflector: Reflector) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const ctx = GqlExecutionContext.create(context);
@@ -31,10 +24,8 @@ export class RolesGuard implements CanActivate {
 
         const hasRole = () => roles.every((role) => userRoles.includes(role));
         if (user && hasRole()) {
-            console.log('User has the required roles');
             return true;
         } else {
-            console.log('User does not have the required roles');
             throw new UnauthorizedException('Access denied');
         }
     }

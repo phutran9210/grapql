@@ -32,6 +32,8 @@ export class UsersResolver {
     }
 
     @Mutation(() => User)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(...EDIT_ROLES)
     async updateUser(
         @Args('updateUserInput') updateUserInput: UpdateUserInput,
         @Args('id', { type: () => Int }) id: number,
@@ -40,6 +42,8 @@ export class UsersResolver {
     }
 
     @Mutation(() => User)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(...EDIT_ROLES)
     setRolesToUser(
         @Args('roleIds', { type: () => [Int] }) roleIds: number[],
         @Args('userId', { type: () => Int }) userId: number,
@@ -48,6 +52,8 @@ export class UsersResolver {
     }
 
     @Mutation(() => User)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(...EDIT_ROLES)
     removeRolesFromUser(
         @Args('roleIds', { type: () => [Int] }) roleIds: number[],
         @Args('userId', { type: () => Int }) userId: number,
@@ -56,6 +62,8 @@ export class UsersResolver {
     }
 
     @Mutation(() => User)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(...EDIT_ROLES)
     removeUser(@Args('id', { type: () => Int }) id: number) {
         return this.usersService.remove(id);
     }

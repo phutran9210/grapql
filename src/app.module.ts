@@ -8,6 +8,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from "@nestjs/jwt";
 import { RolesModule } from "./application/module/roles/roles.module";
+import { JwtService } from './domain/service/jwt.service';
 
 @Module({
     imports: [
@@ -17,21 +18,21 @@ import { RolesModule } from "./application/module/roles/roles.module";
             envFilePath: ['.env'],
             ignoreEnvFile: process.env.NODE_ENV === 'production',
         }),
-        JwtModule.registerAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            global: true,
-            useFactory: (config: ConfigService) => ({
-                secret: config.get('JWT_SECRET', 'defaultSecret'),
-                signOptions: { expiresIn: '1d' },
-            }),
-        }),
+        // JwtModule.registerAsync({
+        //     imports: [ConfigModule],
+        //     inject: [ConfigService],
+        //     global: true,
+        //     useFactory: (config: ConfigService) => ({
+        //         secret: config.get('JWT_SECRET', 'defaultSecret'),
+        //         signOptions: { expiresIn: '1d' },
+        //     }),
+        // }),
+        JwtService,
         DatabaseModule,
         UsersModule,
         RolesModule,
 
     ],
-    controllers: [],
     providers: [
         {
             provide: APP_FILTER,
