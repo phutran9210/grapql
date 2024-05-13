@@ -30,7 +30,6 @@ export class JwtAuthGuard implements CanActivate {
         throw new UnauthorizedException('User not found!!!');
       }
       const roles = user.roles.map(role => role.name);
-
       request.user = user;
       request.roles = roles;
     } catch (err) {

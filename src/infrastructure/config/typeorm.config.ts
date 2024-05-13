@@ -7,12 +7,12 @@ dotenvConfig({ path: '.env' });
 export const configDB = {
     type: 'mysql',
     host: 'localhost',
-    port: 3306,
+    port: 3307,
     username: 'root',
-    password: 'lamgico123',
+    password: '1234@abc',
     database: 'graphql_tutorial_test',
     entities: ['dist/**/**/*.entity{.ts,.js}'],
-    synchronize: true,
+    synchronize: false,
     // logging: true
     extra: {
         charset: 'utf8mb4_unicode_ci',

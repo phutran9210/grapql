@@ -1,13 +1,18 @@
 import {
     Column,
-    CreateDateColumn, DeleteDateColumn,
-    Entity, JoinTable, ManyToMany,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    JoinTable,
+    ManyToMany,
+    OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
-} from "typeorm";
+    UpdateDateColumn,
+} from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Role } from "./Role.entity";
-import { Exclude } from "class-transformer";
+import { Role } from './Role.entity';
+import { Exclude } from 'class-transformer';
+import { Post } from './Post.entity';
 
 @Entity('users')
 @ObjectType()
@@ -42,19 +47,22 @@ export class User {
     deleted_at?: Date;
 
     @Field(() => [Role])
-    @ManyToMany(() => Role, role => role.users)
+    @ManyToMany(() => Role, (role) => role.users)
     @JoinTable({
         name: 'user_role', // Tên bảng liên kết trong cơ sở dữ liệu
         joinColumn: {
             name: 'user_id', // Tên cột trong bảng liên kết tham chiếu đến User
-            referencedColumnName: 'id'
+            referencedColumnName: 'id',
         },
         inverseJoinColumn: {
             name: 'role_id', // Tên cột trong bảng liên kết tham chiếu đến Role
-            referencedColumnName: 'id'
-        }
+            referencedColumnName: 'id',
+        },
     })
     roles: Role[];
+
+    @OneToMany(() => Post, (post) => post.user)
+    posts: Post[];
 
     constructor(partial: Partial<User>) {
         Object.assign(this, partial);

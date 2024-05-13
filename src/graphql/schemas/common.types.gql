@@ -3,7 +3,7 @@
 scalar Date
 
 type PageInfo {
+    totalPages: Int!
+    currentPage: Int!
     total: Int!
-    limit: Int!
-    offset: Int!
 }

@@ -5,10 +5,12 @@ import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './application/module/users/users.module';
 import { GqlHttpExceptionFilter } from './domain/exception/graphql-exception.filter';
 import { APP_FILTER } from '@nestjs/core';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from "@nestjs/jwt";
-import { RolesModule } from "./application/module/roles/roles.module";
+import { ConfigModule } from '@nestjs/config';
+import { PostsModule } from './application/module/posts/posts.module';
+import { RolesModule } from './application/module/roles/roles.module';
 import { JwtService } from './domain/service/jwt.service';
+import { AppController } from './app.controller';
+import { UsersService } from './application/module/users/users.service';
 
 @Module({
     imports: [
@@ -31,7 +33,7 @@ import { JwtService } from './domain/service/jwt.service';
         DatabaseModule,
         UsersModule,
         RolesModule,
-
+        PostsModule,
     ],
     providers: [
         {
@@ -39,5 +41,6 @@ import { JwtService } from './domain/service/jwt.service';
             useClass: GqlHttpExceptionFilter,
         },
     ],
+    controllers: [AppController],
 })
 export class AppModule {}

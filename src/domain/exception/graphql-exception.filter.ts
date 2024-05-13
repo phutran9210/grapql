@@ -20,6 +20,7 @@ export class GqlHttpExceptionFilter implements ExceptionFilter {
 
         if (exception instanceof UnprocessableEntityException) {
             const response = exception.getResponse() as any; // Assuming response is of type HttpExceptionResponse
+            console.log('UnprocessableEntityException:', response.message);
             const uniqueFirstWords = new Set(); // Using a Set to store unique first words
             const errorMessages = response.message
                 .map((msg: string) => {
@@ -41,6 +42,10 @@ export class GqlHttpExceptionFilter implements ExceptionFilter {
         }
 
         if (exception instanceof UnauthorizedException) {
+            // return {
+            //     statusCode: 200,
+            //     message: 'Unauthorized',
+            // };
             throw new ApolloError('Unauthorized', '401');
         }
 

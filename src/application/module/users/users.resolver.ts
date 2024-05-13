@@ -1,14 +1,12 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from '../../../domain/entity/User.entity';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
-import { ApolloError } from 'apollo-server-express';
-import { JwtAuthGuard } from "../../../domain/guard/JwtAuthGuard.guard";
-import { UseGuards } from "@nestjs/common";
-import { Roles } from "../../../domain/guard/decorator/token-name.decorator";
-import { EDIT_ROLES } from "../../../infrastructure/constants/RoleGroup.constants";
-import { RolesGuard } from "../../../domain/guard/RolesGuard.guard";
+import { UserInputs, UpdateUserInput } from '../../dto';
+import { JwtAuthGuard } from '../../../domain/guard/JwtAuthGuard.guard';
+import { UseGuards } from '@nestjs/common';
+import { Roles } from '../../../domain/guard/decorator/token-name.decorator';
+import { EDIT_ROLES } from '../../../infrastructure/constants/RoleGroup.constants';
+import { RolesGuard } from '../../../domain/guard/RolesGuard.guard';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -17,7 +15,7 @@ export class UsersResolver {
     @Mutation(() => User)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(...EDIT_ROLES)
-    async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+    async createUser(@Args('createUserInput') createUserInput: UserInputs) {
         return await this.usersService.create(createUserInput);
     }
 

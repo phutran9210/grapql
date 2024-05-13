@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRoleInput } from './dto/create-role.input';
-import { UpdateRoleInput } from './dto/update-role.input';
+import { RoleInputs, UpdateRoleInput } from "../../dto";
 
 @Injectable()
 export class RolesService {
-  create(createRoleInput: CreateRoleInput) {
+  create(createRoleInput: RoleInputs) {
     return 'This action adds a new role';
   }
 

@@ -1,0 +1,6 @@
+export * from './common.input'
+export * from './role/role.inputs'
+export * from './user/user.inputs'
+export * from './post/post.inputs'
+export * from './post/post.args'
+export * from './post/post.objType'

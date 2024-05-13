@@ -1,9 +1,17 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import * as compression from 'compression';
+import helmet from 'helmet';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+
+    // NOTE: compression
+    app.use(compression());
+
+    // NOTE: added security
+    app.use(helmet());
 
     // Enable CORS
     app.enableCors({
@@ -25,7 +33,18 @@ async function bootstrap() {
     // Enable class serializer interceptor
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-    await app.listen(3000);
+    await app.listen(process.env.PORT || 3000);
+    console.log(`Application is running on: http://localhost:${process.env.PORT}`);
+
+    // Graceful shutdown for SIGINT signal (Ctrl+C) in development mode
+    process.on('SIGINT', async () => {
+        console.log('Received SIGINT, shutting down gracefully');
+        await app.close();
+        process.exit(0);
+    });
 }
 
-bootstrap();
+void bootstrap().catch((err) => {
+    console.error(err);
+    process.exit(1);
+});

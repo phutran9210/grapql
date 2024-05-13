@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
 import { User } from '../../../domain/entity/User.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { ApolloError } from 'apollo-server-express';
 import { Role } from '../../../domain/entity/Role.entity';
 import { uniqBy } from 'lodash';
+import { UpdateUserInput, UserInputs } from "../../dto";
 
 @Injectable()
 export class UsersService {
@@ -19,7 +18,7 @@ export class UsersService {
         private roleRepository: Repository<Role>,
     ) {}
 
-    async create(createUserInput: CreateUserInput) {
+    async create(createUserInput: UserInputs) {
         try {
             const existingUser = await this.usersRepository.findOne({
                 where: { username: createUserInput.username },
